@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Quiz: Camada de Rede (Network)</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; }
+        .quiz-container { background: #fff; padding: 20px; border-radius: 10px; width: 50%; margin: auto; }
+        .question { font-size: 18px; margin-bottom: 10px; }
+        .option { display: block; text-align: left; margin: 5px auto; padding: 10px; background: #ddd; cursor: pointer; border-radius: 5px; width: 80%; }
+        .option:hover { background: #ccc; }
+        .correct { background: #8bc34a !important; }
+        .wrong { background: #e57373 !important; }
+        .score { font-size: 20px; margin-top: 20px; display: none; }
+        #next-btn, #restart-btn { margin-top: 20px; padding: 10px; font-size: 16px; cursor: pointer; display: none; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Flashcard Quiz: Camada de Rede (Network)</h2>
+        <div id="question" class="question"></div>
+        <div id="options"></div>
+        <div id="explanation" style="margin-top:10px; font-size:14px; color: #555;"></div>
+        <button id="next-btn" onclick="nextQuestion()">Próxima</button>
+        <button id="restart-btn" onclick="restartQuiz()">Voltar para o início</button>
+        <div id="score" class="score"></div>
+    </div>
+    <script>
+        const questions = [
+            { 
+                question: "Qual é a principal função da Camada de Rede no modelo OSI?", 
+                options: ["A) Gerenciar conexões físicas", "B) Encaminhar pacotes entre redes", "C) Garantir a segurança da rede", "D) Armazenar dados temporariamente", "E) Controlar a comunicação de aplicativos"],
+                answer: 1,
+                explanation: "A Camada de Rede é responsável pelo roteamento e encaminhamento de pacotes entre diferentes redes."
+            },
+            { 
+                question: "Qual desses protocolos pertence à Camada de Rede?", 
+                options: ["A) TCP", "B) UDP", "C) IP", "D) HTTP", "E) FTP"],
+                answer: 2,
+                explanation: "O protocolo IP (Internet Protocol) opera na Camada de Rede, sendo responsável pelo endereçamento e roteamento."
+            },
+            { 
+                question: "Qual dispositivo é essencial para o funcionamento da Camada de Rede?", 
+                options: ["A) Switch", "B) Roteador", "C) Hub", "D) Modem", "E) Firewall"],
+                answer: 1,
+                explanation: "O roteador é o principal dispositivo da Camada de Rede, pois encaminha pacotes entre diferentes redes."
+            },
+            { 
+                question: "O que é endereçamento IP?", 
+                options: ["A) Um identificador único para redes", "B) Um método de segurança", "C) Uma forma de acessar a internet", "D) Um protocolo de comunicação segura", "E) Um sistema de autenticação"],
+                answer: 0,
+                explanation: "O endereçamento IP é utilizado para identificar dispositivos em redes."
+            },
+            { 
+                question: "O protocolo ICMP é utilizado para?", 
+                options: ["A) Transmissão de arquivos", "B) Testes e diagnósticos", "C) Criptografia", "D) Gerenciamento de usuários", "E) Controle de tráfego"],
+                answer: 1,
+                explanation: "O ICMP é utilizado para diagnósticos, como no comando ping."
+            },
+            { 
+                question: "O que significa MTU (Maximum Transmission Unit)?", 
+                options: ["A) Maior tempo de uso da rede", "B) Tamanho máximo de um pacote", "C) Quantidade de roteadores na rede", "D) Número de conexões simultâneas", "E) Tempo médio de uso"],
+                answer: 1,
+                explanation: "O MTU define o tamanho máximo de um pacote de dados que pode ser transmitido sem fragmentação."
+            }
+        ];
+
+        let score = 0;
+        let currentQuestion = 0;
+        function loadQuestion() {
+            let q = questions[currentQuestion];
+            document.getElementById("question").innerText = q.question;
+            let optionsHtml = "";
+            q.options.forEach((opt, index) => {
+                optionsHtml += `<div class='option' onclick='checkAnswer(${index}, this)'>${opt}</div>`;
+            });
+            document.getElementById("options").innerHTML = optionsHtml;
+            document.getElementById("explanation").innerText = "";
+            document.getElementById("next-btn").style.display = "none";
+        }
+        function checkAnswer(selected, element) {
+            let q = questions[currentQuestion];
+            if (selected === q.answer) {
+                score++;
+                element.classList.add("correct");
+                document.getElementById("explanation").innerHTML = `<b style='color:green;'>Correto!</b> ${q.explanation}`;
+                document.getElementById("next-btn").style.display = "block";
+            } else {
+                element.classList.add("wrong");
+                document.getElementById("explanation").innerHTML = `<b style='color:red;'>Errado!</b> Tente novamente!`;
+            }
+        }
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                document.getElementById("score").innerText = `Você acertou ${score} de ${questions.length}!`;
+                document.getElementById("score").style.display = "block";
+                document.getElementById("restart-btn").style.display = "block";
+            }
+        }
+        function restartQuiz() {
+            score = 0;
+            currentQuestion = 0;
+            document.getElementById("score").style.display = "none";
+            document.getElementById("restart-btn").style.display = "none";
+            loadQuestion();
+        }
+        loadQuestion();
+    </script>
+</body>
+</html>
